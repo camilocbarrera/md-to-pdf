@@ -37,8 +37,14 @@ export function PdfExportButton({ documentTitle }: PdfExportButtonProps) {
   };
 
   return (
-    <Button variant="default" size="sm" onClick={handleExportToPdf} disabled={isExporting}>
-      <FileDown className="h-4 w-4 mr-2" />
+    <Button 
+      variant="default" 
+      size="sm" 
+      className="h-6 px-2 text-xs transition-ultra" 
+      onClick={handleExportToPdf} 
+      disabled={isExporting}
+    >
+      <FileDown className="h-3 w-3 mr-1" />
       {isExporting ? "Exporting..." : "Export PDF"}
     </Button>
   );

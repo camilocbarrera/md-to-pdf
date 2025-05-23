@@ -29,7 +29,7 @@ export function AboutDialog({ open, onOpenChange, githubUrl, linkedinUrl }: Abou
         </DialogHeader>
         <div className="space-y-4">
           <p className="text-sm">
-            Markdown PDF is an open-source tool that allows you to write Markdown with a live
+            Markdown PDF is a tool that allows you to write Markdown with a live
             preview and export to PDF. All processing happens in your browser - no data is sent to
             any server.
           </p>

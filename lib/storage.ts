@@ -109,6 +109,11 @@ export const getDocument = async (id: string): Promise<DocumentType | null> => {
 
 // Delete a document by ID
 export const deleteDocument = async (id: string): Promise<void> => {
+  // Track if welcome document is being deleted
+  if (id === "welcome") {
+    localStorage.setItem('welcomeDocumentDeleted', 'true');
+  }
+  
   try {
     const db = await initDB();
     return new Promise((resolve, reject) => {

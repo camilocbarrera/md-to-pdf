@@ -1,11 +1,14 @@
 "use client";
 
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import type { DocumentType } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { Calendar, FileText, Hash, Search } from "lucide-react";
+import { Calendar, FileText, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface CommandPaletteProps {
@@ -27,10 +30,14 @@ export function CommandPalette({
 }: CommandPaletteProps) {
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const isMobile = useIsMobile();
+  
+  // Debounce search on mobile for better performance
+  const debouncedSearch = useDebouncedValue(search, isMobile ? 300 : 0);
 
   // Filter documents based on search query
   const filteredDocuments = documents.filter((doc) => {
-    const searchLower = search.toLowerCase();
+    const searchLower = debouncedSearch.toLowerCase();
     return (
       doc.title.toLowerCase().includes(searchLower) ||
       doc.content.toLowerCase().includes(searchLower)
@@ -38,13 +45,13 @@ export function CommandPalette({
   });
 
   // Add "Create new document" option if there's a search query
-  const showCreateOption = search.trim().length > 0;
+  const showCreateOption = debouncedSearch.trim().length > 0;
   const totalItems = filteredDocuments.length + (showCreateOption ? 1 : 0);
 
   // Reset selected index when search changes
   useEffect(() => {
     setSelectedIndex(0);
-  }, [search]);
+  }, [debouncedSearch]);
 
   // Reset search when dialog opens/closes
   useEffect(() => {
@@ -54,8 +61,10 @@ export function CommandPalette({
     }
   }, [open]);
 
-  // Handle keyboard navigation
+  // Handle keyboard navigation (disabled on mobile for better touch experience)
   useEffect(() => {
+    if (isMobile) return; // Skip keyboard navigation on mobile
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!open) return;
 
@@ -81,15 +90,16 @@ export function CommandPalette({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open, selectedIndex, totalItems]);
+  }, [open, selectedIndex, totalItems, isMobile]);
 
-  const handleSelect = () => {
-    if (showCreateOption && selectedIndex === 0) {
-      // Create new document with search query as title
+  const handleSelect = (index?: number) => {
+    const targetIndex = index !== undefined ? index : selectedIndex;
+    
+    if (showCreateOption && targetIndex === 0) {
       onCreateDocument();
       onOpenChange(false);
     } else {
-      const docIndex = showCreateOption ? selectedIndex - 1 : selectedIndex;
+      const docIndex = showCreateOption ? targetIndex - 1 : targetIndex;
       const selectedDoc = filteredDocuments[docIndex];
       if (selectedDoc) {
         onDocumentSelect(selectedDoc.id);
@@ -115,7 +125,7 @@ export function CommandPalette({
 
     return parts.map((part, index) =>
       regex.test(part) ? (
-        <mark key={index} className="bg-yellow-200 dark:bg-yellow-800 rounded px-1">
+        <mark key={index} className="bg-accent text-accent-foreground rounded px-0.5">
           {part}
         </mark>
       ) : (
@@ -125,16 +135,16 @@ export function CommandPalette({
   };
 
   const getContentPreview = (content: string, query: string) => {
-    if (!query.trim()) return content.slice(0, 100) + "...";
+    if (!query.trim()) return content.slice(0, isMobile ? 50 : 80) + "...";
 
     const queryLower = query.toLowerCase();
     const contentLower = content.toLowerCase();
     const index = contentLower.indexOf(queryLower);
 
-    if (index === -1) return content.slice(0, 100) + "...";
+    if (index === -1) return content.slice(0, isMobile ? 50 : 80) + "...";
 
-    const start = Math.max(0, index - 50);
-    const end = Math.min(content.length, index + query.length + 50);
+    const start = Math.max(0, index - (isMobile ? 25 : 40));
+    const end = Math.min(content.length, index + query.length + (isMobile ? 25 : 40));
     const preview = content.slice(start, end);
 
     return (start > 0 ? "..." : "") + preview + (end < content.length ? "..." : "");
@@ -142,83 +152,87 @@ export function CommandPalette({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl p-0 gap-0">
-        <div className="flex items-center border-b px-3">
-          <Search className="h-4 w-4 shrink-0 opacity-50" />
+      <DialogContent className="p-0 gap-0 max-w-90vw max-h-95 backdrop-blur-4 border-border shadow-card transition-ultra">
+        <DialogTitle className="sr-only">Search and Create Documents</DialogTitle>
+        <div className="flex items-center border-b px-2 h-8">
+          <Search className="h-3 w-3 shrink-0 opacity-50" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search documents..."
-            className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-            autoFocus
+            className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-6 text-sm px-2 transition-ultra"
+            autoFocus={true} // Instant focus as specified
           />
         </div>
 
-        <ScrollArea className="max-h-96">
-          <div className="p-2">
+        <ScrollArea className="max-h-80 scroll-gpu">
+          <div className="p-1">
             {totalItems === 0 ? (
-              <div className="py-6 text-center text-sm text-muted-foreground">
-                <FileText className="h-8 w-8 mx-auto mb-2 opacity-50" />
+              <div className="py-4 text-center text-xs text-muted-foreground">
+                <FileText className="h-6 w-6 mx-auto mb-1 opacity-50" />
                 No documents found
               </div>
             ) : (
-              <div className="space-y-1">
+              <div className="space-y-0.5">
                 {showCreateOption && (
                   <div
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm cursor-pointer",
-                      selectedIndex === 0 ? "bg-accent text-accent-foreground" : "hover:bg-muted"
+                      "flex items-center gap-2 rounded px-2 py-1 text-xs cursor-pointer transition-ultra",
+                      !isMobile && selectedIndex === 0 ? "bg-accent text-accent-foreground" : "hover:bg-muted"
                     )}
-                    onClick={handleSelect}
+                    onClick={() => handleSelect(0)}
                   >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                      <Hash className="h-4 w-4" />
+                    <div className="flex h-6 w-6 items-center justify-center rounded bg-primary text-primary-foreground">
+                      <Plus className="h-3 w-3" />
                     </div>
-                    <div className="flex-1">
-                      <div className="font-medium">Create "{search}"</div>
-                      <div className="text-xs text-muted-foreground">Create a new document</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium leading-tight">Create new document</div>
+                      <div className="text-xs text-muted-foreground opacity-75 leading-tight">
+                        Create "{debouncedSearch}"
+                      </div>
                     </div>
                   </div>
                 )}
 
                 {filteredDocuments.map((doc, index) => {
                   const itemIndex = showCreateOption ? index + 1 : index;
-                  const isSelected = selectedIndex === itemIndex;
+                  const isSelected = !isMobile && selectedIndex === itemIndex;
                   const isCurrent = doc.id === currentDocumentId;
 
                   return (
                     <div
                       key={doc.id}
                       className={cn(
-                        "flex items-start gap-3 rounded-md px-3 py-2 text-sm cursor-pointer",
+                        "flex items-start gap-2 rounded px-2 py-1 text-xs cursor-pointer transition-ultra",
                         isSelected ? "bg-accent text-accent-foreground" : "hover:bg-muted"
                       )}
-                      onClick={() => {
-                        onDocumentSelect(doc.id);
-                        onOpenChange(false);
-                      }}
+                      onClick={() => handleSelect(itemIndex)}
                     >
-                      <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted mt-0.5">
-                        <FileText className={cn("h-4 w-4", isCurrent && "text-primary")} />
+                      <div className="flex h-6 w-6 items-center justify-center rounded bg-muted mt-0.5">
+                        <FileText className={cn("h-3 w-3", isCurrent && "text-primary")} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <div className="font-medium truncate">
-                            {highlightMatch(doc.title, search)}
+                        <div className="flex items-center gap-1">
+                          <div className="font-medium truncate leading-tight">
+                            {highlightMatch(doc.title, debouncedSearch)}
                           </div>
                           {isCurrent && (
-                            <span className="text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded">
+                            <span className="text-xs bg-primary text-primary-foreground px-1 py-0.5 rounded leading-none">
                               Current
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                          {highlightMatch(getContentPreview(doc.content, search), search)}
-                        </div>
-                        <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
-                          <Calendar className="h-3 w-3" />
-                          {formatDate(doc.updatedAt)}
-                        </div>
+                        {!isMobile && (
+                          <>
+                            <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1 leading-tight">
+                              {highlightMatch(getContentPreview(doc.content, debouncedSearch), debouncedSearch)}
+                            </div>
+                            <div className="flex items-center gap-1 mt-0.5 text-xs text-muted-foreground opacity-75">
+                              <Calendar className="h-2.5 w-2.5" />
+                              {formatDate(doc.updatedAt)}
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   );
@@ -228,13 +242,15 @@ export function CommandPalette({
           </div>
         </ScrollArea>
 
-        <div className="border-t px-3 py-2 text-xs text-muted-foreground">
-          <div className="flex justify-between">
-            <span>↑↓ to navigate</span>
-            <span>↵ to select</span>
-            <span>esc to close</span>
+        {!isMobile && (
+          <div className="border-t px-2 py-1 text-xs text-muted-foreground">
+            <div className="flex justify-between opacity-75">
+              <span>↑↓ navigate</span>
+              <span>↵ select</span>
+              <span>esc close</span>
+            </div>
           </div>
-        </div>
+        )}
       </DialogContent>
     </Dialog>
   );

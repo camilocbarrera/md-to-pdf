@@ -14,7 +14,7 @@ export function Footer({
 }: FooterProps) {
   return (
     <footer className="border-t py-2 px-4 flex justify-between items-center bg-background">
-      <div className="text-sm text-muted-foreground">Markdown PDF</div>
+      <div className="text-sm text-muted-foreground">Markdown to PDF</div>
       <div className="flex items-center gap-2">
         <Button
           variant="ghost"
