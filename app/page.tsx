@@ -337,6 +337,7 @@ export default function Home() {
         currentDocumentId={currentDocument.id}
         onDocumentSelect={handleDocumentSelect}
         onCreateDocument={handleCreateDocument}
+        currentDocumentTitle={currentDocument.title}
       />
 
       <Toaster />
