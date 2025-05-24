@@ -126,7 +126,7 @@ importers:
         specifier: ^0.454.0
         version: 0.454.0(react@19.1.0)
       mermaid:
-        specifier: ^11.4.0
+        specifier: latest
         version: 11.6.0
       monaco-editor:
         specifier: latest
