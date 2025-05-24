@@ -6,7 +6,7 @@ import { Header } from "@/components/header";
 import { KeyboardShortcutsDialog } from "@/components/keyboard-shortcuts-dialog";
 import { MobileEditor } from "@/components/mobile-editor";
 import { MobileLayout } from "@/components/mobile-layout";
-import { OptimizedPreview } from "@/components/optimized-preview";
+import { OptimizedPreview } from "@/components/preview";
 import { Resizable } from "@/components/resizable";
 import { Sidebar } from "@/components/sidebar";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";

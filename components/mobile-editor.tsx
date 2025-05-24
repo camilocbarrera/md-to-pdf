@@ -40,20 +40,22 @@ export function MobileEditor({ value, onChange, shouldFocus = false, onFocus, on
 
   if (isMobile) {
     return (
-      <div className="h-full w-full p-4">
+      <div className="h-full w-full p-2 overflow-hidden">
         <textarea
           ref={textareaRef}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onFocus={onFocus}
           onKeyDown={handleKeyDown}
-          className="w-full h-full resize-none border-0 bg-background text-foreground focus:outline-none focus:ring-0 font-mono text-sm leading-relaxed"
+          className="w-full h-full resize-none border-0 bg-background text-foreground focus:outline-none focus:ring-0 font-mono text-sm leading-tight overflow-auto transition-ultra"
           placeholder="Type your Markdown here..."
           spellCheck={false}
           autoCapitalize="off"
           autoCorrect="off"
           style={{
-            fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
+            fontFamily: "'Fira Code', 'Cascadia Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
+            fontSize: '13px',
+            lineHeight: '1.3',
           }}
         />
       </div>

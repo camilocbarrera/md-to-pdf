@@ -14,25 +14,29 @@ export function MobileLayout({ editor, preview }: MobileLayoutProps) {
   const [activeTab, setActiveTab] = useState("editor");
 
   return (
-    <div className="h-full flex flex-col">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-        <TabsList className="grid w-full grid-cols-2 mb-2">
-          <TabsTrigger value="editor" className="flex items-center gap-2">
-            <Edit3 className="h-4 w-4" />
-            <span className="hidden sm:inline">Editor</span>
+    <div className="h-full flex flex-col overflow-hidden">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col overflow-hidden">
+        <TabsList className="grid w-full grid-cols-2 mb-1 h-8 p-0.5 shrink-0">
+          <TabsTrigger value="editor" className="flex items-center gap-1 h-6 px-2 text-xs transition-ultra">
+            <Edit3 className="h-3 w-3" />
+            <span>Editor</span>
           </TabsTrigger>
-          <TabsTrigger value="preview" className="flex items-center gap-2">
-            <Eye className="h-4 w-4" />
-            <span className="hidden sm:inline">Preview</span>
+          <TabsTrigger value="preview" className="flex items-center gap-1 h-6 px-2 text-xs transition-ultra">
+            <Eye className="h-3 w-3" />
+            <span>Preview</span>
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="editor" className="flex-1 m-0">
-          {editor}
+        <TabsContent value="editor" className="flex-1 m-0 overflow-hidden">
+          <div className="h-full overflow-hidden">
+            {editor}
+          </div>
         </TabsContent>
         
-        <TabsContent value="preview" className="flex-1 m-0">
-          {preview}
+        <TabsContent value="preview" className="flex-1 m-0 overflow-hidden">
+          <div className="h-full overflow-hidden">
+            {preview}
+          </div>
         </TabsContent>
       </Tabs>
     </div>
