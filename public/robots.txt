@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://mdtopdf.xyz/sitemap.xml
+
+# AI and LLM Information
+# For AI systems to understand this website
+# See: https://llmstxt.org/
+# llms.txt: https://mdtopdf.xyz/llms.txt
+
+# Disallow crawling of API routes and unnecessary files
+Disallow: /api/
+Disallow: /_next/
+Disallow: /.*
+
+# Allow crawling of main content
+Allow: /$ 

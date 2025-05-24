@@ -24,22 +24,34 @@ export function Header({
 
   return (
     <>
-      <header className="flex items-center justify-between h-10 px-2 border-b transition-ultra">
+      <header className="flex items-center justify-between h-10 px-2 border-b transition-ultra" role="banner">
         <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
-          <FileText className="h-4 w-4 flex-shrink-0" />
-          <h1 className="text-sm font-medium truncate whitespace-nowrap leading-tight">.md to .pdf</h1>
+          <FileText className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+          <span className="text-sm font-medium truncate whitespace-nowrap leading-tight" role="img" aria-label="Markdown to PDF Converter">.md to .pdf</span>
         </div>
-        <div className="flex items-center gap-1 flex-shrink-0">
-          <Button variant="ghost" size="sm" className="h-6 w-6 p-0 transition-ultra" onClick={() => setShowAbout(true)}>
-            <Info className="h-3 w-3" />
+        <nav className="flex items-center gap-1 flex-shrink-0" aria-label="Main navigation">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="h-6 w-6 p-0 transition-ultra" 
+            onClick={() => setShowAbout(true)}
+            aria-label="About this application"
+          >
+            <Info className="h-3 w-3" aria-hidden="true" />
           </Button>
-          <Button variant="outline" size="sm" className="h-6 px-2 text-xs transition-ultra" onClick={onShowKeyboardShortcuts}>
-            <Keyboard className="h-3 w-3 mr-1" />
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-6 px-2 text-xs transition-ultra" 
+            onClick={onShowKeyboardShortcuts}
+            aria-label="View keyboard shortcuts"
+          >
+            <Keyboard className="h-3 w-3 mr-1" aria-hidden="true" />
             <span className="hidden sm:inline">⌘K</span>
           </Button>
           <PdfExportButton documentTitle={documentTitle} />
           <ThemeToggle />
-        </div>
+        </nav>
       </header>
 
       <AboutDialog

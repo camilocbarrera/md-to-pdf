@@ -296,6 +296,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen bg-background text-foreground">
+      {/* Hidden SEO heading */}
+      <h1 className="sr-only">Markdown to PDF Converter - Free Online Tool with Live Preview</h1>
+      
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
           documents={documents}
@@ -305,26 +308,29 @@ export default function Home() {
           open={sidebarOpen}
           setOpen={setSidebarOpen}
         />
-        <div className="flex flex-col flex-1 h-full overflow-hidden">
+        <main className="flex flex-col flex-1 h-full overflow-hidden">
           <Header
             documentTitle={currentDocument.title}
             onShowKeyboardShortcuts={() => setShowKeyboardShortcuts(true)}
             githubUrl={githubUrl}
             linkedinUrl={linkedinUrl}
           />
-          {isMobile ? (
-            <MobileLayout editor={editor} preview={preview} />
-          ) : (
-            <Resizable direction="horizontal" defaultSize={50} className="flex-1 overflow-hidden">
-              {editor}
-              {preview}
-            </Resizable>
-          )}
-        </div>
+          <section className="flex-1 overflow-hidden" aria-label="Document Editor and Preview">
+            {isMobile ? (
+              <MobileLayout editor={editor} preview={preview} />
+            ) : (
+              <Resizable direction="horizontal" defaultSize={50} className="flex-1 overflow-hidden">
+                {editor}
+                {preview}
+              </Resizable>
+            )}
+          </section>
+        </main>
       </div>
 
       <Footer githubUrl={githubUrl} linkedinUrl={linkedinUrl} />
 
+      {/* Dialogs and overlays */}
       <KeyboardShortcutsDialog
         open={showKeyboardShortcuts}
         onOpenChange={setShowKeyboardShortcuts}

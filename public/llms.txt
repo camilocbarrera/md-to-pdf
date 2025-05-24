@@ -1,0 +1,91 @@
+# Markdown to PDF Converter
+
+A free, client-side Markdown to PDF converter with live preview, syntax highlighting, and Mermaid diagram support. All processing happens in the browser - no data is uploaded to servers.
+
+## Overview
+
+This web application allows users to convert Markdown documents to PDF format with a split-pane interface featuring real-time preview. Built with Next.js 15, React 19, and TypeScript, it provides a professional document editing experience entirely in the browser.
+
+## Key Features
+
+- **Live Preview**: Real-time Markdown rendering with split-pane interface
+- **PDF Export**: One-click PDF generation using html2pdf.js
+- **Syntax Highlighting**: Code blocks with theme support via react-syntax-highlighter
+- **Mermaid Diagrams**: Support for flowcharts, sequence diagrams, and other visualizations
+- **Document Management**: Local browser storage with auto-save functionality
+- **Search**: Global document search with Cmd/Ctrl+K shortcut
+- **Themes**: Dark/light mode support with system preference detection
+- **Mobile Responsive**: Optimized mobile editing experience
+- **Keyboard Shortcuts**: Efficient workflow with hotkeys
+- **Privacy-First**: All processing happens client-side, no server uploads
+
+## Technical Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS with custom design system
+- **Editor**: Monaco Editor for code editing experience
+- **Markdown**: react-markdown with remark-gfm for GitHub-flavored markdown
+- **PDF Generation**: html2pdf.js for client-side PDF creation
+- **Diagrams**: Mermaid for flowcharts and diagrams
+- **Storage**: Browser localStorage for document persistence
+- **Analytics**: Vercel Analytics for usage tracking
+
+## Use Cases
+
+- **Documentation**: Convert README files and docs to PDF
+- **Technical Writing**: Create formatted technical documents
+- **Note-Taking**: Personal notes with export capability
+- **Academic Writing**: Research papers and assignments
+- **Project Reports**: Professional document creation
+- **Code Documentation**: Include syntax-highlighted code in PDFs
+- **Flowcharts**: Visual diagrams in documents
+
+## Target Users
+
+- Developers and technical writers
+- Students and researchers
+- Content creators and bloggers
+- Project managers
+- Anyone needing to convert Markdown to PDF
+
+## Getting Started
+
+1. Visit the application in your web browser
+2. Start typing Markdown in the left pane
+3. See live preview in the right pane
+4. Use the PDF export button to download
+5. Documents auto-save to browser storage
+6. Use Cmd/Ctrl+K for quick document search
+
+## API and Integration
+
+This is a standalone web application without public APIs. However, the codebase is open source and can be:
+- Self-hosted for enterprise use
+- Extended with custom features
+- Integrated into existing workflows
+- Modified for specific requirements
+
+## Performance and Limitations
+
+- **Client-side processing**: No server dependencies
+- **Browser storage**: Limited by browser localStorage quotas
+- **PDF quality**: Dependent on html2pdf.js capabilities
+- **Large documents**: Performance may vary with very large files
+- **Browser compatibility**: Requires modern JavaScript features
+
+## Open Source
+
+The project is open source and available on GitHub. Contributions welcome for:
+- Feature enhancements
+- Bug fixes
+- Performance improvements
+- UI/UX improvements
+- Documentation updates
+
+## Contact and Support
+
+- GitHub: https://github.com/camilocbarrera/md-to-pdf
+- LinkedIn: https://www.linkedin.com/in/cristiancamilocorrea/
+- Issues: Report bugs and feature requests on GitHub
+
+This tool represents the evolution of document processing from server-based to client-side solutions, prioritizing user privacy and providing instant results without the need for account creation or data uploads. 
